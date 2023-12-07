@@ -23,17 +23,16 @@ public class Main {
     public static int calculate() throws IOException {
         List<String> data = download();
         int sum = 0;
-
         for (String line : data) {
             String first = "";
             String last = "";
             StringBuilder word = new StringBuilder();
-
-            // Process the first part of the line
             for (int i = 0; i < line.length(); i++) {
+                // if first time seen true;
                 char current = line.charAt(i);
                 if (Character.isDigit(current)) {
                     first = String.valueOf(current);
+                    word.setLength(0);
                     break;
                 } else {
                     word.append(current);
@@ -46,16 +45,16 @@ public class Main {
                     }
                 }
             }
-
-            // Process the last part of the line
-            for (int j = line.length() - 1; j >= 0; j--) {
+            word.reverse();
+            for (int j = line.length()-1; j >= 0; j--) {
                 char current = line.charAt(j);
                 if (Character.isDigit(current)) {
                     last = String.valueOf(current);
                     break;
                 } else {
-                    word.insert(0, current); // Insert at the beginning to reverse the word
-                    if (!isPartlyNumberWordReverse(word.toString())) {
+                    word.reverse();
+                    word.append(current);
+                    if (!isPartlyNumberWordReverse(word.reverse().toString())) {
                         word.setLength(0);
                     } else if (isNumberWord(word.toString())) {
                         last = stringToNumber(word.toString());
@@ -63,7 +62,6 @@ public class Main {
                     }
                 }
             }
-
             int res = Integer.parseInt(first + last);
             sum += res;
         }
@@ -114,3 +112,4 @@ public class Main {
         System.out.println(calculate());
     }
 }
+// 53866
