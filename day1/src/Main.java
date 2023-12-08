@@ -26,38 +26,33 @@ public class Main {
         for (String line : data) {
             String first = "";
             String last = "";
-            StringBuilder word = new StringBuilder();
+            String string = "";
             for (int i = 0; i < line.length(); i++) {
                 // if first time seen true;
                 char current = line.charAt(i);
                 if (Character.isDigit(current)) {
                     first = String.valueOf(current);
-                    word.setLength(0);
                     break;
                 } else {
-                    word.append(current);
-                    if (!isPartlyNumberWord(word.toString())) {
-                        word.setLength(0);
-                    } else if (isNumberWord(word.toString())) {
-                        first = stringToNumber(word.toString());
-                        word.setLength(0);
+                    string = line.substring(i);
+                    first = isPartlyNumberWordReverse(string);
+                    if (first != null){
+                        first = stringToNumber(first);
                         break;
                     }
                 }
             }
-            word.reverse();
+            string = "";
             for (int j = line.length()-1; j >= 0; j--) {
                 char current = line.charAt(j);
                 if (Character.isDigit(current)) {
                     last = String.valueOf(current);
                     break;
                 } else {
-                    word.reverse();
-                    word.append(current);
-                    if (!isPartlyNumberWordReverse(word.reverse().toString())) {
-                        word.setLength(0);
-                    } else if (isNumberWord(word.toString())) {
-                        last = stringToNumber(word.toString());
+                    string = line.substring(j);
+                    last = isPartlyNumberWordReverse(string);
+                    if (last != null){
+                        last = stringToNumber(last);
                         break;
                     }
                 }
@@ -66,6 +61,7 @@ public class Main {
             sum += res;
         }
         return sum;
+
     }
 
     private static String stringToNumber(String string) {
@@ -83,29 +79,13 @@ public class Main {
         };
     }
 
-    public static boolean isPartlyNumberWord(String s) {
+    public static String isPartlyNumberWordReverse(String s) {
         for (String num : numberWords) {
-            if (num.startsWith(s.toLowerCase())) {
-                return true;
+            if (s.startsWith(num)) {
+                return num;
             }
         }
-        return false;
-    }
-
-    public static boolean isPartlyNumberWordReverse(String s) {
-        for (String num : numberWords) {
-            if (num.endsWith(s.toLowerCase())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isNumberWord(String word) {
-        return switch (word) {
-            case "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" -> true;
-            default -> false;
-        };
+        return null;
     }
 
     public static void main(String[] args) throws IOException {
